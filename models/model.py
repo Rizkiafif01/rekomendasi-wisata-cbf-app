@@ -1,6 +1,4 @@
 import pandas as pd
-import difflib
-import os
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -9,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 def load_model():
     df = pd.read_csv('data/destinasi-wisata-preprocessed.csv')
 
-    # Kolom wajib
+    # Kolom yang diambil
     required_cols = ['Place_Name', 'Category', 'City', 'clean_text']
     for col in required_cols:
         if col not in df.columns:
@@ -18,11 +16,7 @@ def load_model():
     df[required_cols] = df[required_cols].fillna('')
 
     # TF-IDF langsung dari teks bersih
-    vectorizer = TfidfVectorizer(
-        ngram_range=(1, 2),
-        max_df=0.9,
-        min_df=2
-    )
+    vectorizer = TfidfVectorizer()
 
     vectors = vectorizer.fit_transform(df['clean_text'])
     similarity = cosine_similarity(vectors)
@@ -48,11 +42,7 @@ def recommend(place_name, model, n=5):
     place_name = place_name.strip()
     names = df['Place_Name'].tolist()
 
-    match = difflib.get_close_matches(place_name, names, n=1, cutoff=0.6)
-    if not match:
-        return []
-
-    idx = df[df['Place_Name'] == match[0]].index[0]
+    idx = df.index[df['Place_Name'] == place_name][0]
     scores = list(enumerate(similarity[idx]))
     scores = sorted(scores, key=lambda x: x[1], reverse=True)[1:n+1]
 

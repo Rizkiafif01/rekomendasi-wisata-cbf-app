@@ -1,14 +1,9 @@
 import streamlit as st
 import pandas as pd
+
 from utils.preprocessing import (
-    preprocess_and_save,
-    preprocess_text,
-    combine_text_features,
     preprocess_text_steps
 )
-
-import os
-
 
 st.set_page_config(
     page_title="Data Preparation",
@@ -28,33 +23,18 @@ st.write(
 
 st.divider()
 
-# =========================
-# PATH & KOLOM
-# =========================
+# Path File
 INPUT_PATH = "data/destinasi-wisata-indonesia.csv"
 OUTPUT_PATH = "data/destinasi-wisata-preprocessed.csv"
 TEXT_COLUMNS = ["Place_Name", "Description", "Category", "City"]
 
-@st.cache_data(show_spinner=False)
-def load_or_preprocess():
-    if os.path.exists(OUTPUT_PATH):
-        return pd.read_csv(OUTPUT_PATH)
-    else:
-        return preprocess_and_save(
-            input_path=INPUT_PATH,
-            output_path=OUTPUT_PATH,
-            text_columns=TEXT_COLUMNS
-        )
-
-df = load_or_preprocess()
+df = pd.read_csv(OUTPUT_PATH)
 
 # Ambil 1 contoh data
 sample_text = df["combined_text"].iloc[0]
 result = preprocess_text_steps(sample_text)
 
-# =========================
-# 1. GABUNGKAN FITUR
-# =========================
+# Penggabungan Fitur
 with st.container(border=True):
     st.subheader("1. Penggabungan Fitur Teks")
 
@@ -71,9 +51,7 @@ with st.container(border=True):
         use_container_width=True
     )
 
-# =========================
-# 2. CASE FOLDING
-# =========================
+# Case Folding
 with st.container(border=True):
     st.subheader("2. Case Folding")
 
@@ -89,9 +67,7 @@ with st.container(border=True):
         use_container_width=True
     )
 
-# =========================
-# 3. TOKENIZING
-# =========================
+# Tokenizing
 with st.container(border=True):
     st.subheader("3. Tokenizing")
 
@@ -109,10 +85,7 @@ with st.container(border=True):
         }),
         use_container_width=True
     )
-
-# =========================
-# 4. STOPWORD REMOVAL
-# =========================
+# Stopword Removal
 with st.container(border=True):
     st.subheader("4. Stopword Removal (Sastrawi)")
 
@@ -132,9 +105,7 @@ with st.container(border=True):
         use_container_width=True
     )
 
-# =========================
-# 5. STEMMING
-# =========================
+# Stemming
 with st.container(border=True):
     st.subheader("5. Stemming (Sastrawi)")
 
@@ -154,9 +125,6 @@ with st.container(border=True):
         use_container_width=True
     )
 
-# =========================
-# INFO AKHIR
-# =========================
 st.info(
     "Hasil preprocessing telah disimpan dan data siap digunakan "
     "pada tahap pemodelan sistem rekomendasi."

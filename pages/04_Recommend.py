@@ -1,32 +1,22 @@
 import streamlit as st
 from models.model import load_model, recommend, get_places_by_category
 
-# =====================
-# PAGE CONFIG (HARUS PALING ATAS)
-# =====================
 st.set_page_config(
     page_title="Rekomendasi Wisata",
-    layout="centered"
+    layout="wide"
 )
 
-# =====================
-# CACHE MODEL
-# =====================
 @st.cache_resource
 def get_model():
     return load_model()
 
 model = get_model()
 
-# =====================
-# UI HEADER
-# =====================
+# Header
 st.title("🎯 Sistem Rekomendasi Wisata Indonesia")
 st.write("Pilih kategori wisata, lalu pilih nama tempat untuk mendapatkan rekomendasi serupa.")
 
-# =====================
-# KATEGORI DROPDOWN
-# =====================
+# Dropdown Kategori
 kategori_options = [
     "Budaya",
     "Bahari",
@@ -40,9 +30,7 @@ selected_category = st.selectbox(
     options=["-- Pilih Kategori --"] + kategori_options
 )
 
-# =====================
-# PLACE DROPDOWN (DINAMIS)
-# =====================
+# Memunculkan nama tempat
 place_name = None
 
 if selected_category != "-- Pilih Kategori --":
@@ -55,10 +43,7 @@ if selected_category != "-- Pilih Kategori --":
         )
     else:
         st.warning("Tidak ada tempat wisata untuk kategori ini.")
-
-# =====================
-# ACTION BUTTON
-# =====================
+# tombol rekomendasi
 if st.button("🔍 Find Recommendation"):
     if not place_name or place_name == "-- Pilih Tempat Wisata --":
         st.warning("Silakan pilih nama tempat wisata.")

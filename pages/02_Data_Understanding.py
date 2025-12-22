@@ -7,17 +7,11 @@ st.set_page_config(
     layout="wide"
 )
 
-# =========================
-# LOAD DATASET
-# =========================
-# Ganti path sesuai dataset kamu
+# Load Dataset
 DATA_PATH = "data/destinasi-wisata-indonesia.csv"
-
 df = pd.read_csv(DATA_PATH)
 
-# =========================
-# JUDUL HALAMAN
-# =========================
+# Judul
 st.title("📁 Data Understanding")
 
 st.write(
@@ -31,9 +25,7 @@ st.write(
 
 st.divider()
 
-# =========================
-# 1. DESKRIPSI DATASET
-# =========================
+# Deskripsi
 with st.container(border=True):
     st.subheader("1. Deskripsi Dataset")
     st.write(
@@ -44,11 +36,9 @@ with st.container(border=True):
         proses ekstraksi fitur pada sistem rekomendasi berbasis konten.
         """
     )
-    st.write(f"📌 **Jumlah total destinasi wisata:** {len(df)} data")
+    st.write(f"**Jumlah total destinasi wisata:** {len(df)} data")
 
-# =========================
-# 2. STRUKTUR & ATRIBUT DATA
-# =========================
+# Struktur DAta
 with st.container(border=True):
     st.subheader("2. Struktur dan Atribut Data")
 
@@ -67,9 +57,7 @@ with st.container(border=True):
 
     st.dataframe(atribut_df, use_container_width=True)
 
-# =========================
-# 3. CONTOH DATA
-# =========================
+# Contoh 10 Data Pertama
 with st.container(border=True):
     st.subheader("3. Contoh Data")
     st.write(
@@ -77,9 +65,7 @@ with st.container(border=True):
     )
     st.dataframe(df.head(10), use_container_width=True)
 
-# =========================
-# 4. JUMLAH & DISTRIBUSI DATA
-# =========================
+# Distribusi Data
 with st.container(border=True):
     st.subheader("4. Jumlah dan Distribusi Data")
 
@@ -88,44 +74,32 @@ with st.container(border=True):
     with col1:
         st.metric("Jumlah Destinasi Wisata", len(df))
 
-    # GANTI SESUAI DATASET KAMU
-    KATEGORI_COL = "Category"
-
-    if KATEGORI_COL in df.columns:
-        with col2:
-            st.metric(
-                "Jumlah Kategori Wisata",
-                df[KATEGORI_COL].nunique()
-            )
-        category_count = (
-            df[KATEGORI_COL]
-            .value_counts()
-            .reset_index()
-            .rename(columns={
-                "index": "Kategori",
-                KATEGORI_COL: "Jumlah"
-            })
+    with col2:
+        st.metric(
+            "Jumlah Kategori Wisata",
+            df["Category"].nunique()
         )
 
-        category_count.columns = ["Kategori", "Jumlah"]
+    category_count = (
+        df["Category"]
+        .value_counts()
+        .reset_index()
+        .rename(columns={
+           "index": "Kategori",
+            "Category": "Jumlah"
+        })
+    )
 
-        st.write("Distribusi destinasi wisata berdasarkan kategori:")
+    category_count.columns = ["Kategori", "Jumlah"]
 
-        st.bar_chart(
-            category_count.set_index("Kategori"),
-            use_container_width=True
-        )
+    st.write("Distribusi destinasi wisata berdasarkan kategori:")
 
-    else:
-        st.error(
-            f"Kolom '{KATEGORI_COL}' tidak ditemukan dalam dataset."
-        )
+    st.bar_chart(
+        category_count.set_index("Kategori"),
+        use_container_width=True
+    )
 
-
-
-# =========================
-# 5. KUALITAS DATA
-# =========================
+# Cek Missing Values
 with st.container(border=True):
     st.subheader("5. Kualitas Data")
 

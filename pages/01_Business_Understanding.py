@@ -9,34 +9,28 @@ st.set_page_config(
 st.title("📊 Business Understanding")
 
 st.write(
-    "Halaman ini menjelaskan pemahaman awal terkait sistem rekomendasi wisata "
-    "yang dikembangkan menggunakan metode Content-Based Filtering (CBF)."
+    "Pada halaman ini menjelaskan pemahaman awal terkait sistem rekomendasi wisata yang dikembangkan menggunakan metode Content-Based Filtering (CBF)."
 )
 
 st.divider()
 
-# =========================
-# 1. Pengertian Sistem Rekomendasi CBF
-# =========================
+# Pengertian
 with st.container(border=True):
     st.subheader("1. Pengertian Sistem Rekomendasi Menggunakan Content-Based Filtering (CBF)")
     st.write(
         """
         Sistem rekomendasi berbasis **Content-Based Filtering (CBF)** merupakan pendekatan
         yang memberikan rekomendasi berdasarkan **kesesuaian karakteristik atau konten**
-        suatu item dengan preferensi pengguna. Dalam metode ini, sistem menganalisis
-        atribut atau deskripsi item yang pernah dipilih atau diminati oleh pengguna,
-        kemudian merekomendasikan item lain yang memiliki tingkat kemiripan tertinggi.
+        suatu item dengan preferensi pengguna. Dalam metode ini sistem akan meminta tempat wisata yang pernah dikunjungi,
+        kemudian merekomendasikan item atau tempat wisata lain yang memiliki tingkat kemiripan tertinggi.
 
         Pada konteks rekomendasi wisata, CBF bekerja dengan membandingkan informasi
-        destinasi wisata seperti deskripsi, kategori, dan fasilitas untuk menemukan
+        destinasi wisata seperti nama tempat, deskripsi, kategori, dan kota untuk menemukan
         destinasi yang relevan dengan pilihan pengguna sebelumnya.
         """
     )
 
-# =========================
-# 2. Latar Belakang
-# =========================
+# Latar Belakang
 with st.container(border=True):
     st.subheader("2. Latar Belakang")
     st.write(
@@ -52,9 +46,7 @@ with st.container(border=True):
         """
     )
 
-# =========================
-# 3. Permasalahan
-# =========================
+# Permasalahan
 with st.container(border=True):
     st.subheader("3. Permasalahan")
     st.write(
@@ -62,22 +54,16 @@ with st.container(border=True):
         Permasalahan yang dihadapi dalam pemilihan destinasi wisata antara lain:
         - Banyaknya pilihan destinasi wisata dengan informasi yang beragam  
         - Sulitnya menemukan destinasi yang sesuai dengan minat pengguna  
-        - Kurangnya sistem yang mampu memberikan rekomendasi secara personal  
-        - Informasi destinasi wisata yang tersebar dan tidak terstruktur  
         """
     )
 
-# =========================
-# 4. Tujuan
-# =========================
+# Tujuan
 with st.container(border=True):
     st.subheader("4. Tujuan")
     st.write(
         """
         Tujuan dari pengembangan sistem rekomendasi wisata ini adalah:
-        - Mengembangkan sistem rekomendasi wisata berbasis Content-Based Filtering  
-        - Membantu pengguna menemukan destinasi wisata yang sesuai dengan preferensi  
-        - Memanfaatkan informasi konten destinasi wisata secara optimal  
-        - Meningkatkan pengalaman pengguna dalam menentukan tujuan wisata  
+        - Membantu pengguna dalam memilih destinasi wisata di tengah banyaknya pilihan destinasi yang tersedia
+        - Menyediakan rekomendasi destinasi wisata yang sesuai dengan minat pengguna berdasarkan karakteristik dan informasi destinasi  
         """
     )

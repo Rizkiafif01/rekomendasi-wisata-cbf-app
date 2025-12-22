@@ -7,8 +7,7 @@ st.set_page_config(
 )
 
 st.title(
-    "🌍 Sistem Rekomendasi Wisata di Indonesia "
-    "Menggunakan Metode Content-Based Filtering (CBF)"
+    "🌍 Sistem Rekomendasi Wisata di Indonesia Menggunakan Metode Content-Based Filtering (CBF)"
 )
 
 st.subheader("Project Overview")
