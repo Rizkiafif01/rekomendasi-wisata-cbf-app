@@ -7,7 +7,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 def load_model():
     df = pd.read_csv('data/destinasi-wisata-preprocessed.csv')
 
-    # Kolom yang diambil
     required_cols = ['Place_Name', 'Category', 'City', 'clean_text']
     for col in required_cols:
         if col not in df.columns:
@@ -15,43 +14,30 @@ def load_model():
 
     df[required_cols] = df[required_cols].fillna('')
 
-    # TF-IDF langsung dari teks bersih
     vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(df['clean_text'])
 
-    vectors = vectorizer.fit_transform(df['clean_text'])
-    similarity = cosine_similarity(vectors)
-
-    return df, similarity
+    return df, vectorizer, tfidf_matrix
 
 
-def get_places_by_category(model, category_keyword):
-    df, _ = model
-    category_keyword = category_keyword.lower()
+def recommend_by_keywords(keyword_input, model, n=5):
+    df, vectorizer, tfidf_matrix = model
 
-    filtered = df[
-        df['Place_Name'].str.lower().str.contains(category_keyword) |
-        df['Category'].str.lower().str.contains(category_keyword)
-    ]
+    # keyword: "pantai, indah, sunset" → "pantai indah sunset"
+    keywords = keyword_input.lower().replace(',', ' ')
 
-    return sorted(filtered['Place_Name'].unique().tolist())
+    keyword_vector = vectorizer.transform([keywords])
 
+    similarity_scores = cosine_similarity(keyword_vector, tfidf_matrix)[0]
 
-def recommend(place_name, model, n=5):
-    df, similarity = model
-
-    place_name = place_name.strip()
-    names = df['Place_Name'].tolist()
-
-    idx = df.index[df['Place_Name'] == place_name][0]
-    scores = list(enumerate(similarity[idx]))
-    scores = sorted(scores, key=lambda x: x[1], reverse=True)[1:n+1]
+    ranked_indices = similarity_scores.argsort()[::-1][:n]
 
     return [
         {
             "name": df.iloc[i]['Place_Name'],
             "category": df.iloc[i]['Category'],
             "city": df.iloc[i]['City'],
-            "score": round(float(score), 3)
+            "score": round(float(similarity_scores[i]), 3)
         }
-        for i, score in scores
+        for i in ranked_indices
     ]
