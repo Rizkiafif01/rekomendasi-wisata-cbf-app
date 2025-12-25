@@ -1,5 +1,5 @@
 import streamlit as st
-from models.model import load_model, recommend, get_places_by_category
+from models.model import load_model, recommend_by_keywords
 
 st.set_page_config(
     page_title="Rekomendasi Wisata",
@@ -14,47 +14,36 @@ model = get_model()
 
 # Header
 st.title("🎯 Sistem Rekomendasi Wisata Indonesia")
-st.write("Pilih kategori wisata, lalu pilih nama tempat untuk mendapatkan rekomendasi serupa.")
-
-# Dropdown Kategori
-kategori_options = [
-    "Budaya",
-    "Bahari",
-    "Cagar Alam",
-    "Tempat Ibadah",
-    "Taman Hiburan",
-    "Pusat Perbelanjaan"]
-
-selected_category = st.selectbox(
-    "Pilih Kategori Wisata",
-    options=["-- Pilih Kategori --"] + kategori_options
+st.write(
+    "Masukkan kata kunci wisata (dipisahkan dengan koma), "
+    "misalnya: `pantai, indah, sunset`."
 )
 
-# Memunculkan nama tempat
-place_name = None
+# Input keyword
+keyword_input = st.text_input(
+    "🔑 Masukkan Keyword Wisata",
+    placeholder="contoh: pantai, alam, tenang"
+)
 
-if selected_category != "-- Pilih Kategori --":
-    place_list = get_places_by_category(model, selected_category)
+# Jumlah rekomendasi
+top_k = 5
 
-    if place_list:
-        place_name = st.selectbox(
-            "Pilih Nama Tempat Wisata",
-            options=["-- Pilih Tempat Wisata --"] + place_list
-        )
-    else:
-        st.warning("Tidak ada tempat wisata untuk kategori ini.")
-# tombol rekomendasi
+# Tombol rekomendasi
 if st.button("🔍 Find Recommendation"):
-    if not place_name or place_name == "-- Pilih Tempat Wisata --":
-        st.warning("Silakan pilih nama tempat wisata.")
+    if not keyword_input.strip():
+        st.warning("Silakan masukkan minimal satu keyword.")
     else:
         with st.spinner("Mencari rekomendasi terbaik..."):
-            results = recommend(place_name, model, n=5)
+            results = recommend_by_keywords(
+                keyword_input,
+                model,
+                n=top_k
+            )
 
         if not results:
             st.error("Rekomendasi tidak ditemukan.")
         else:
-            st.subheader("✨ Rekomendasi Tempat Wisata Serupa")
+            st.subheader("✨ Rekomendasi Tempat Wisata")
 
             for i, r in enumerate(results, start=1):
                 st.markdown(
